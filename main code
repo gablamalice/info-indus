@@ -1,0 +1,135 @@
+/*
+code principal projet informatique industriel d'un systeme de gestion de pont levant
+*/
+
+//____library
+#include <Servo.h> //servo moteur
+
+//____Objet C++
+Servo servo_moteur;
+// Ainsi que serial 
+
+//____Definitions
+#define LEDB 2
+#define LEDV 3
+#define LEDR 4
+#define servo_moteur_pin 9
+#define analogpin A10
+#define detecteur_pin 6
+
+
+
+//____Déclarations des variables globales
+unsigned int angle;
+unsigned int pot;
+int detecteur_val;
+
+
+
+
+//____Prototypes ou déclarations des procédures et fonctions
+void test_lampe(void);
+void test_moteur(void);
+unsigned int moteur_ouverture (unsigned int angle);
+unsigned int moteur_fermeture (unsigned int angle);
+unsigned int valeur_pot (void);
+
+void setup() {
+  Serial.begin(9600); //communication entre le PC et arduino 
+  pinMode(LEDB, OUTPUT);
+  pinMode(LEDV, OUTPUT);
+  pinMode(LEDR, OUTPUT);
+  pinMode(A10, INPUT);
+  pinMode(detecteur_pin,INPUT);
+  servo_moteur.attach(servo_moteur_pin);
+  angle = 0;
+  detecteur_val = 0;
+}
+
+void test_lampe(void)
+{
+  digitalWrite(LEDB,HIGH);
+  digitalWrite(LEDV,HIGH);
+  digitalWrite(LEDR,HIGH);
+}
+
+void test_moteur(void)
+{
+  //definition de la position du moteur, indiquer la valeur de l'angle
+  servo_moteur.write(90);
+  delay(1000);
+  servo_moteur.write(0);
+  delay(5000);
+  servo_moteur.write(180);
+  delay(2000);
+}
+
+unsigned int moteur_ouverture (unsigned int angle)
+{
+  // ouverture du moteur à 90° et blocage de celui ci à 90°
+  /*
+  Serial.print("valeur angle debut boucle : ");
+  Serial.print(angle);
+  Serial.print("\t");
+  */
+  for (angle ; angle <= 90; angle += 1){
+    servo_moteur.write(angle);
+    delay(100);
+  }
+
+  /*
+  Serial.print("valeur angle fin boucle : ");
+  Serial.print(angle);
+  Serial.print("\t");
+  */
+  return angle;
+}
+
+unsigned int moteur_fermeture (unsigned int angle)
+{
+  // ouverture du moteur à 90° et blocage de celui ci à 90°
+  /*
+  Serial.print("valeur angle debut boucle : ");
+  Serial.print(angle);
+  Serial.print("\t");
+  */
+  
+  for (angle ; angle >= 1; angle -= 1){
+    servo_moteur.write(angle);
+    delay(100);
+  }
+  /*
+  Serial.print("valeur angle fin boucle : ");
+  Serial.print(angle);
+  Serial.print("\t");
+  */
+  
+  return angle;
+}
+
+unsigned int valeur_pot (void)
+{
+  pot = map(analogRead(analogpin),0,1024,0,200);
+  //Serial.println(pot);
+  delay(100);
+  return pot;
+}
+
+unsigned int valeur_detecteur(void)
+{
+  detecteur_val = digitalRead(detecteur_pin);
+  /*
+  Serial.print("Valeur detecteur : ");
+  Serial.println(detecteur_val);
+  Serial.print("\t");
+  return detecteur_val;
+  */
+}
+
+void loop(){
+
+
+  
+  
+  
+}
